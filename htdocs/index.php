@@ -4,8 +4,14 @@ define('ROOTPATH', dirname(dirname(__FILE__)) . '/' );
 define('APPPATH', ROOTPATH . 'application/');
 define('MINIPATH', ROOTPATH . 'mini/');
 
-require_once MINIPATH . 'mini.php';
-use Mini\Mini;
+require_once ROOTPATH . 'config.php';
+require_once MINIPATH . 'autoloader.php';
 
-$router = Mini::instance();
-$router->run();
+// register mini and controllers autoloader
+Mini\Autoloader::register();
+// set configuration
+Mini\Config::set($config);
+// get instance of mini
+$mini = Mini\Mini::instance();
+// run app
+$mini->run();

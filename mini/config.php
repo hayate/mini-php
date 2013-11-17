@@ -12,22 +12,26 @@ class Config
         $this->config = $config;
     }
 
-    public static function instance(array $config = NULL)
+    public static function instance()
     {
         if (NULL == self::$instance)
         {
-            if (empty($config))
-            {
-                throw new Exception("Config class must be initialize with a config array.");
-            }
-            self::$instance = new self($config);
+            throw new \Exception('Set a configuration array via Config::set before retrieving a Config instance.');
         }
         return self::$instance;
     }
 
+    public static function set(array $config)
+    {
+        if (NULL == self::$instance)
+        {
+            self::$instance == new self($config);
+        }
+    }
+
     public function __get($name)
     {
-        if (in_array($name, $this->config))
+        if (isset($this->config[$name]))
         {
             return $this->config[$name];
         }
@@ -36,10 +40,11 @@ class Config
 
     public function __isset($name)
     {
-        if (in_array($name, $this->config))
-        {
-            return NULL != $this->config[$name];
-        }
-        return FALSE;
+        return isset($this->config[$name]);
+    }
+
+    public function __toString()
+    {
+        return print_r($this->config, TRUE);
     }
 }
